@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -34,6 +35,7 @@ namespace LoginAdmin.Data
             set => firstname = value;
         }
 
+        [Required]
         public string LastName
         {
             get => lastname;
@@ -87,6 +89,7 @@ namespace LoginAdmin.Data
             get => isadmin;
             set => isadmin = value;
         }
+        public object Name => this.firstname + " " + this.lastname;
 
         public User() : base()
         {
@@ -114,6 +117,23 @@ namespace LoginAdmin.Data
             Password = data.Password;
             IsAdmin = data.IsAdmin;
 
+        }
+
+        public User(string email) : base()
+        {
+            ResetProperties();
+            var data = GetUser(email);
+            Id = data.Id;
+            FirstName = data.FirstName;
+            LastName = data.LastName;
+            Address = data.Address;
+            City = data.City;
+            Province = data.Province;
+            Country = data.Country;
+            PhoneNumber = data.PhoneNumber;
+            Email = data.Email;
+            Password = data.Password;
+            IsAdmin = data.IsAdmin;
         }
 
         private void ResetProperties()
@@ -241,6 +261,73 @@ namespace LoginAdmin.Data
             return users;
 
         }
+
+        public User GetUser(string email)
+        {
+            List<User> users = new List<User>();
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select * from UserInfo where email = @email");
+
+            SqlConnection con = new SqlConnection(ConnectionString);
+
+            SqlCommand cmd = new SqlCommand(sb.ToString(), con)
+            {
+                Transaction = SqlTransaction
+            };
+
+            cmd.Parameters.AddWithValue("@email", email);
+
+            con.Open();
+
+            SqlDataAdapter sa = new SqlDataAdapter(cmd);
+
+            DataSet ds = new DataSet();
+            try
+            {
+                sa.Fill(ds);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            var dataRowCollection = ds.Tables[0]?.Rows;
+            if (dataRowCollection != null)
+            {
+                if(dataRowCollection.Count > 1)
+                {
+                    throw new Exception("More than one user found. Please contact IT support");
+                }
+                foreach (DataRow dataRow in dataRowCollection)
+                {
+                    User user = new User
+                    {
+                        Id = Convert.ToInt32(dataRow["Id"]),
+                        FirstName = dataRow["FirstName"].ToString(),
+                        LastName = dataRow["LastName"].ToString(),
+                        Address = dataRow["Address"].ToString(),
+                        City = dataRow["City"].ToString(),
+                        Province = dataRow["Province"].ToString(),
+                        Country = dataRow["Country"].ToString(),
+                        PhoneNumber = dataRow["PhoneNumber"].ToString(),
+                        Email = dataRow["Email"].ToString(),
+                        Password = dataRow["Password"].ToString(),
+                        IsAdmin = Convert.ToInt32(dataRow["IsAdmin"]),
+
+                    };
+                    return user;
+                }
+            }
+
+            throw new Exception("User not found");
+
+        }
         public bool AddUser(User user)
         {
             SqlConnection con = new SqlConnection(ConnectionString);
@@ -292,7 +379,7 @@ namespace LoginAdmin.Data
             cmd.Parameters.AddWithValue("@province", user.Province);
             cmd.Parameters.AddWithValue("@country", user.Country);
             cmd.Parameters.AddWithValue("@phoneNumer", user.PhoneNumber);
-            cmd.Parameters.AddWithValue("@isAdmin", user.IsAdmin);
+            
 
             con.Open();
             int i = cmd.ExecuteNonQuery();
@@ -324,9 +411,5 @@ namespace LoginAdmin.Data
                 return false;
         }
 
-
     }
 }
-
-
-  
