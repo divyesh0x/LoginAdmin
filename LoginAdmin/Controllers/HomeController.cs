@@ -103,7 +103,7 @@ namespace LoginAdmin.Controllers
             return View(model);
         }
 
-        /*public ActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             if (id <= 0)
             {
@@ -112,7 +112,7 @@ namespace LoginAdmin.Controllers
             User user = new User(id);
 
             return View(user);
-        }*/
+        }
 
         [HttpPost]
         public ActionResult Delete(int id)
