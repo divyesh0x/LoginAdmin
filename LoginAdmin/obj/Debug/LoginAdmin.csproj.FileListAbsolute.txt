@@ -1,0 +1,2 @@
+C:\Users\Admin\Source\Repos\LoginAdmin\LoginAdmin\obj\Debug\LoginAdmin.csprojAssemblyReference.cache
+C:\Users\Admin\Source\Repos\LoginAdmin\LoginAdmin\obj\Debug\LoginAdmin.csproj.CoreCompileInputs.cache
