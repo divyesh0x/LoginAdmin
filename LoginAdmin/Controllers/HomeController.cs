@@ -112,7 +112,7 @@ namespace LoginAdmin.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
+        /*public ActionResult Delete(int id)
         {
             if (id <= 0)
             {
@@ -121,7 +121,7 @@ namespace LoginAdmin.Controllers
             User user = new User(id);
 
             return View(user);
-        }
+        }*/
 
         public ActionResult Create()
         {
