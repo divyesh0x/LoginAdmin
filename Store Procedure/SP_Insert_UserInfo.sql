@@ -3,9 +3,7 @@ IF EXISTS (SELECT * FROM SYSOBJECTS WHERE ID = OBJECT_ID('dbo.CreateUserInfo') A
 GO
 
 CREATE PROCEDURE dbo.CreateUserInfo
-(
-	@Id int,
-    @FirstName varchar(20) ,
+(   @FirstName varchar(20) ,
     @LastName varchar(20) ,
     @Address varchar(20) ,
     @City varchar(20) ,
@@ -21,8 +19,7 @@ BEGIN
     SET NOCOUNT ON
     INSERT [UserInfo]
     (
-		[Id],
-        [FirstName],
+       [FirstName],
 		[LastName],
 		[Address],
 		[City],
@@ -35,7 +32,6 @@ BEGIN
     )
     VALUES
     (
-		@Id,
 		@FirstName,
 		@LastName,
 		@Address,
@@ -47,6 +43,5 @@ BEGIN
 		@Password,
 		 @isAdmin
     )
-    SET @Id = @@IDENTITY
 
 END

@@ -12,9 +12,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ConnectionString)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.FirstName)
         </th>
         <th>
@@ -50,9 +47,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.ConnectionString)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.FirstName)
         </td>
         <td>
@@ -85,9 +79,39 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
             @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            <div id="myRow">
+                <a id="@item.Id" href="#">Delete</a>
+            </div>
+           @* @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
         </td>
     </tr>
 }
 
 </table>
+<script>
+    $(document).ready(function () {
+        $('#myRow a').click(function (e) {
+            e.preventDefault();
+            alt("Hellow");
+           
+            var id = $(this).attr("Id");
+
+            var MSG = confirm("Are you sure you want to delete this Record?");
+
+            if (MSG) {
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete")',
+                    data: { id: id },
+                    success: function () {
+                        setTimeout(function () { location.reload(); }, 1000);
+                    },
+                    error: function () {
+                        alert("Error while deleting data");
+                    }
+                });
+            }
+        })
+    });
+</script>

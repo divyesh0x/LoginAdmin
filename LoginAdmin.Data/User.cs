@@ -21,7 +21,7 @@ namespace LoginAdmin.Data
         private string phonenumber;
         private string email;
         private string password;
-        private int isadmin;
+        private Boolean isadmin;
 
         public int Id
         {
@@ -84,7 +84,7 @@ namespace LoginAdmin.Data
             set => password = value;
         }
 
-        public int IsAdmin
+        public Boolean IsAdmin
         {
             get => isadmin;
             set => isadmin = value;
@@ -147,7 +147,7 @@ namespace LoginAdmin.Data
             PhoneNumber = "";
             Email = "";
             Password = "";
-            IsAdmin = -1;
+            IsAdmin = false;
         }
 
         public User GetUser(int id)
@@ -155,12 +155,15 @@ namespace LoginAdmin.Data
             User user = new User();
             SqlConnection con = new SqlConnection(ConnectionString);
 
-            SqlCommand cmd = new SqlCommand("dbo.RetrieveUserInfo", con)
+            /*SqlCommand cmd = new SqlCommand("dbo.RetrieveUserInfo", con)
             {
                 CommandType = CommandType.StoredProcedure,
                 Transaction = SqlTransaction
+            };*/
+            SqlCommand cmd = new SqlCommand("Select * from UserInfo where Id=@Id", con)
+            {
+                Transaction = SqlTransaction
             };
-
             cmd.Parameters.AddWithValue("@Id", id);
 
             con.Open();
@@ -196,7 +199,7 @@ namespace LoginAdmin.Data
                     user.PhoneNumber = dataRow["PhoneNumber"].ToString();
                     user.Email = dataRow["Email"].ToString();
                     user.Password = dataRow["Password"].ToString();
-                    user.IsAdmin = Convert.ToInt32(dataRow["IsAdmin"]);
+                    user.IsAdmin = (Boolean)(dataRow["IsAdmin"]);
                 }
 
             return user;
@@ -252,7 +255,7 @@ namespace LoginAdmin.Data
                         PhoneNumber = dataRow["PhoneNumber"].ToString(),
                         Email = dataRow["Email"].ToString(),
                         Password = dataRow["Password"].ToString(),
-                        IsAdmin = Convert.ToInt32(dataRow["IsAdmin"]),
+                        IsAdmin = (Boolean)(dataRow["IsAdmin"]),
 
                     };
                     users.Add(user);
@@ -318,7 +321,7 @@ namespace LoginAdmin.Data
                         PhoneNumber = dataRow["PhoneNumber"].ToString(),
                         Email = dataRow["Email"].ToString(),
                         Password = dataRow["Password"].ToString(),
-                        IsAdmin = Convert.ToInt32(dataRow["IsAdmin"]),
+                        IsAdmin = (Boolean)(dataRow["IsAdmin"]),
 
                     };
                     return user;
@@ -339,14 +342,15 @@ namespace LoginAdmin.Data
 
             };
 
-            cmd.Parameters.AddWithValue("@id", user.Id);
-            cmd.Parameters.AddWithValue("@firstName", user.FirstName);
-            cmd.Parameters.AddWithValue("@lastName", user.LastName);
-            cmd.Parameters.AddWithValue("@address", user.Address);
-            cmd.Parameters.AddWithValue("@city", user.City);
-            cmd.Parameters.AddWithValue("@province", user.Province);
-            cmd.Parameters.AddWithValue("@country", user.Country);
-            cmd.Parameters.AddWithValue("@phoneNumer", user.PhoneNumber);
+            cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
+            cmd.Parameters.AddWithValue("@LastName", user.LastName);
+            cmd.Parameters.AddWithValue("@Address", user.Address);
+            cmd.Parameters.AddWithValue("@City", user.City);
+            cmd.Parameters.AddWithValue("@Province", user.Province);
+            cmd.Parameters.AddWithValue("@Country", user.Country);
+            cmd.Parameters.AddWithValue("@PhoneNumber", user.PhoneNumber);
+            cmd.Parameters.AddWithValue("@Email", user.Email);
+            cmd.Parameters.AddWithValue("@Password", user.Password);
             cmd.Parameters.AddWithValue("@isAdmin", user.IsAdmin);
 
 
@@ -379,7 +383,8 @@ namespace LoginAdmin.Data
             cmd.Parameters.AddWithValue("@province", user.Province);
             cmd.Parameters.AddWithValue("@country", user.Country);
             cmd.Parameters.AddWithValue("@phoneNumer", user.PhoneNumber);
-            
+            cmd.Parameters.AddWithValue("@Email", user.Email);
+            cmd.Parameters.AddWithValue("@Password", user.Password);
 
             con.Open();
             int i = cmd.ExecuteNonQuery();

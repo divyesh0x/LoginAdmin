@@ -1,7 +1,7 @@
 USE [UserInformation]
 GO
 
-/****** Object:  Table [dbo].[UserInfo]    Script Date: 2020-10-31 1:59:35 PM ******/
+/****** Object:  Table [dbo].[UserInfo]    Script Date: 07-11-2020 12:46:45 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -9,7 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[UserInfo](
-	[Id] [int] NOT NULL,
+	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[FirstName] [varchar](50) NOT NULL,
 	[LastName] [varchar](50) NOT NULL,
 	[Address] [varchar](50) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE [dbo].[UserInfo](
 	[PhoneNumber] [varchar](50) NOT NULL,
 	[Email] [varchar](50) NOT NULL,
 	[Password] [varchar](50) NOT NULL,
-	[isAdmin] [int] NOT NULL,
+	[isAdmin] [bit] NOT NULL,
  CONSTRAINT [PK_UserInfo] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
