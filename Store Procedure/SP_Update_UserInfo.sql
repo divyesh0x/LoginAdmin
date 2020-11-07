@@ -26,7 +26,6 @@ BEGIN
    
     UPDATE [UserInfo]
     SET
-		[Id] = @Id,
         [FirstName] = @FirstName,
 		[LastName] = @LastName,
 		[Address] = @Address,

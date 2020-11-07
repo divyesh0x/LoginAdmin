@@ -24,9 +24,23 @@ namespace LoginAdmin.Controllers
 
             return View();
         }
+        public ActionResult LogIn()
+        {
+            return View();
+        }
+        public ActionResult Details(int id)
+        {
+            if (id <= 0)
+            {
+                throw new Exception("User id is not valid");
+            }
+            User user = new User(id);
+
+            return View(user);
+        }
 
         [HttpPost]
-        public ActionResult Login(string email, string password)
+        public ActionResult LogIn(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
@@ -74,13 +88,8 @@ namespace LoginAdmin.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int id, User model)
+        public ActionResult Edit(User model)
         {
-            if (id <= 0)
-            {
-                throw new Exception("User id is not valid");
-            }
-
             if (ModelState.IsValid)
             {
                 return View();
@@ -89,7 +98,7 @@ namespace LoginAdmin.Controllers
             try
             {
                 //get that user from db
-                User user = new User(id);
+                User user = new User();
 
                 // update based on the info provided
                 user.UpdateUser(model);
@@ -100,7 +109,7 @@ namespace LoginAdmin.Controllers
             }
 
             ViewBag.success = "User updated succesfully";
-            return View(model);
+            return RedirectToAction("Index");
         }
 
         /*public ActionResult Delete(int id)
@@ -114,9 +123,21 @@ namespace LoginAdmin.Controllers
             return View(user);
         }*/
 
-        [HttpPost]
-        public ActionResult Delete(int id)
+        public ActionResult Create()
         {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create(User model)
+        {
+            User user = new User();
+            user.AddUser(model);
+            return RedirectToAction("Index");
+        }
+       [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            bool result = false;
             if (id <= 0)
             {
                 throw new Exception("User id is not valid");
@@ -126,7 +147,7 @@ namespace LoginAdmin.Controllers
             {
                 User user = new User(id);
 
-                user.DeleteUser(id);
+                result =  user.DeleteUser(id);
             }
             catch (Exception ex)
             {
@@ -134,7 +155,7 @@ namespace LoginAdmin.Controllers
             }
 
             ViewBag.success = "User Deleted succesfully";
-            return View(user);
+            return Json(result,JsonRequestBehavior.AllowGet);
         }
     }
 }

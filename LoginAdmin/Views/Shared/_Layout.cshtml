@@ -20,7 +20,7 @@
             </div>
             <div class="navbar-collapse collapse ">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("LogIn", "Index", "LogIn")</li>
+                    <li>@Html.ActionLink("LogIn", "LogIn", "Home")</li>
                     <li>@Html.ActionLink("Contact Us", "Contact", "Home")</li>
                 </ul>
             </div>
@@ -31,14 +31,6 @@
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - By SkyNet Soluations</p>
-        </footer>
-    </div>
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
 
